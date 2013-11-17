@@ -194,7 +194,7 @@ public final class BuildRuleFactoryParams {
     String ancestor = buildFiles.getBasePathOfAncestorTarget(fullPath);
     if (!target.getBasePath().equals(ancestor)) {
       throw new HumanReadableException(
-          "\"%s\" in target \"%s\" crosses a buck package boundary. Find the nearest BUCK file " +
+          "\"%s\" in target \"%s\" crosses a Buck package boundary. Find the nearest BUCK file " +
           "in the directory containing this file and refer to the rule referencing the " +
           "desired file.",
           fullPath,

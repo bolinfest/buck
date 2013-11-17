@@ -764,8 +764,8 @@ public class DefaultJavaLibraryRule extends DoNotUseAbstractBuildable
         //
         // Therefore, some path-wrangling is required to produce the correct string.
 
-        Path resource = MorePaths.separatorsToUnix(rawResource.resolve(context));
-        String javaPackageAsPath = javaPackageFinder.findJavaPackageFolderForPath(resource.toString());
+        String resource = MorePaths.separatorsToUnix(rawResource.resolve(context));
+        String javaPackageAsPath = javaPackageFinder.findJavaPackageFolderForPath(resource);
         Path relativeSymlinkPath;
 
 
@@ -780,18 +780,18 @@ public class DefaultJavaLibraryRule extends DoNotUseAbstractBuildable
         } else if ("".equals(javaPackageAsPath)) {
           // In this case, the project root is acting as the default package, so the resource path
           // works fine.
-          relativeSymlinkPath = resource;
+          relativeSymlinkPath = Paths.get(resource);
         } else {
-          int lastIndex = resource.toString().lastIndexOf(javaPackageAsPath);
+          int lastIndex = resource.lastIndexOf(javaPackageAsPath);
           Preconditions.checkState(lastIndex >= 0,
               "Resource path %s must contain %s",
               resource,
               javaPackageAsPath);
 
-          relativeSymlinkPath = Paths.get(resource.toString().substring(lastIndex));
+          relativeSymlinkPath = Paths.get(resource.substring(lastIndex));
         }
         String target = Paths.get(outputDirectory).resolve(relativeSymlinkPath).toString();
-        MkdirAndSymlinkFileStep link = new MkdirAndSymlinkFileStep(resource.toString(), target);
+        MkdirAndSymlinkFileStep link = new MkdirAndSymlinkFileStep(resource, target);
         commands.add(link);
       }
     }

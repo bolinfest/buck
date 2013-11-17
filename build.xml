@@ -19,6 +19,10 @@
   <property name="javadoc.dir" value="${build.dir}/javadoc" />
   <property name="client.dir" value="third-party/nailgun" />
 
+  <condition property="is_windows">
+    <os family="windows" />
+  </condition>
+
   <fileset dir="${lib.dir}" id="buck.jars">
     <include name="args4j-2.0.26.jar" />
     <include name="ddmlib-r21.jar" />
@@ -277,7 +281,7 @@
     </javadoc>
   </target>
 
-  <target name="client" description="install nailgun buckd c client">
+  <target name="client" description="install nailgun buckd c client" unless="is_windows">
     <mkdir dir="${build.dir}" />
     <exec dir="${basedir}" executable="gcc">
       <arg line="-Wall -pedantic -O3 -o ${build.dir}/ng ${client.dir}/nailgun-client/ng.c" />

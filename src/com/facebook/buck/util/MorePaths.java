@@ -32,28 +32,30 @@ public class MorePaths {
   /** Utility class: do not instantiate. */
   private MorePaths() {}
 
+  // TODO(mbolin): This method is misleading and should be eliminated.
   public static Path newPathInstance(String path) {
-    return separatorsToUnix(path);
+    return Paths.get(path);
   }
 
+  // TODO(mbolin): This method is misleading and should be eliminated.
   public static Path newPathInstance(File file) {
-    return separatorsToUnix(file.getPath());
+    return file.toPath();
   }
 
   /**
    * @return The path using UNIX path separators.
    */
-  public static Path separatorsToUnix(String path) {
+  public static String separatorsToUnix(String path) {
     if (!File.separator.equals("/")) {
       path = path.replace(File.separator, "/");
     }
-    return Paths.get(path).normalize();
+    return path;
   }
 
   /**
    * @return The path using UNIX path separators.
    */
-  public static Path separatorsToUnix(Path path) {
+  public static String separatorsToUnix(Path path) {
     return separatorsToUnix(path.toString());
   }
 

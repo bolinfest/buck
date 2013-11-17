@@ -67,7 +67,7 @@ public abstract class DirectoryTraversal {
 
       @Override
       public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        visit(file.toFile(), rootPath.relativize(file).toString());
+        visit(file.toFile(),  MorePaths.separatorsToUnix(rootPath.relativize(file).toString()));
         return FileVisitResult.CONTINUE;
       }
 

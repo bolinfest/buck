@@ -21,6 +21,8 @@ def relpath(path, start=os.path.curdir):
   """
   if not path:
     raise ValueError("no path specified")
+  return path[len(start) + 1:]
+  print path, start
   start_list = os.path.abspath(start).split(os.path.sep)
   path_list = os.path.abspath(path).split(os.path.sep)
   # Work out how much of the filepath is shared by start and path.
@@ -141,7 +143,7 @@ def symlink_aware_walk(base):
   """
   visited_dirs = set()
   for entry in os.walk(base, topdown=True, followlinks=True):
-    (root, dirs, _files) = entry
+    (root, dirs, files) = entry
     realdirpath = os.path.realpath(root)
     if realdirpath in visited_dirs:
       absdirpath = os.path.abspath(root)
@@ -149,6 +151,8 @@ def symlink_aware_walk(base):
         dirs[:] = []
         continue
     visited_dirs.add(realdirpath)
+    if os.name == 'nt':
+      entry = (root.replace('\\', '/'), dirs, files)
     yield entry
   raise StopIteration
 
@@ -781,8 +785,11 @@ class BuildFileProcessor:
     # build file or the files in includes through include_defs() don't pollute
     # the namespace for subsequent build files.
     build_env = copy.copy(self.root_build_env)
-    relative_path_to_build_file = relpath(build_file, self.project_root).replace('\\', '/')
-    build_env['BASE'] = relative_path_to_build_file[:self.len_suffix]
+    relative_path_to_build_file = build_file.replace('\\', '/')
+    base_path = relative_path_to_build_file[:self.len_suffix]
+    if base_path.startswith('./'):
+      base_path = base_path[2:]
+    build_env['BASE'] = base_path
     build_env['BUILD_FILE_DIRECTORY'] = os.path.dirname(build_file)
     build_env['RULES'] = {}
 
