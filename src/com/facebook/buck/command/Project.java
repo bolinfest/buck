@@ -640,7 +640,7 @@ public class Project {
 
     // If in the root of the project, specify ignored paths.
     if ("".equals(buildRule.getBuildTarget().getBasePathWithSlash())) {
-      for (String path : projectFilesystem.getIgnorePaths()) {
+      for (Path path : projectFilesystem.getIgnorePaths()) {
         module.excludeFolders.add(new SourceFolder(String.format("file://$MODULE_DIR$/%s", path),
             false));
       }

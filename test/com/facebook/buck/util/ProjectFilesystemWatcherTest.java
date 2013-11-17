@@ -84,7 +84,7 @@ public class ProjectFilesystemWatcherTest {
 
     // Pump ProjectFilesystemWatcher.
     watcher = new ProjectFilesystemWatcher(
-        filesystem, eventBus, ImmutableSet.<String>of(), watchService);
+        filesystem, eventBus, ImmutableSet.<Path>of(), watchService);
     visitor.getValue().preVisitDirectory(path, null);
     watcher.postEvents();
 
@@ -110,7 +110,7 @@ public class ProjectFilesystemWatcherTest {
 
     // Pump ProjectFilesystemWatcher.
     watcher = new ProjectFilesystemWatcher(
-        filesystem, eventBus, ImmutableSet.<String>of(), watchService);
+        filesystem, eventBus, ImmutableSet.<Path>of(), watchService);
     visitor.getValue().preVisitDirectory(path, null);
     watcher.postEvents();
 
@@ -134,7 +134,7 @@ public class ProjectFilesystemWatcherTest {
 
     // Pump ProjectFilesystemWatcher.
     watcher = new ProjectFilesystemWatcher(
-        filesystem, eventBus, ImmutableSet.<String>of("/"), watchService);
+        filesystem, eventBus, ImmutableSet.<Path>of(Paths.get("/")), watchService);
     visitor.getValue().preVisitDirectory(path, null);
     watcher.postEvents();
 

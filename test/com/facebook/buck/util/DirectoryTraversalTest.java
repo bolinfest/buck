@@ -18,17 +18,19 @@ package com.facebook.buck.util;
 
 import static org.junit.Assert.assertEquals;
 
-import com.facebook.buck.testutil.integration.DebuggableTemporaryFolder;
-import com.facebook.buck.testutil.integration.ProjectWorkspace;
-import com.facebook.buck.testutil.integration.TestDataHelper;
-import com.google.common.collect.ImmutableSet;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
+import com.facebook.buck.testutil.integration.DebuggableTemporaryFolder;
+import com.facebook.buck.testutil.integration.ProjectWorkspace;
+import com.facebook.buck.testutil.integration.TestDataHelper;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableSet;
 
 public class DirectoryTraversalTest {
   @Rule
@@ -72,9 +74,13 @@ public class DirectoryTraversalTest {
         "file"
     );
     final ImmutableSet.Builder<String> visitedPaths = ImmutableSet.builder();
+    ImmutableSet<Path> ignores = FluentIterable
+        .from(ImmutableSet.of("a", "b/c", "loop", "loop/1"))
+        .transform(MorePaths.STRING_TO_PATH)
+        .toSet();
     new DirectoryTraversal(
         temporaryFolder.getRoot(),
-        ImmutableSet.of("a", "b/c", "loop", "loop/1")) {
+        ignores) {
       @Override
       public void visit(File file, String relativePath) {
         visitedPaths.add(relativePath);

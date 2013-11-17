@@ -16,6 +16,7 @@
 
 package com.facebook.buck.util;
 
+import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSortedSet;
 
@@ -28,6 +29,13 @@ import java.nio.file.Paths;
 import javax.annotation.Nullable;
 
 public class MorePaths {
+
+  public static final Function<String, Path> STRING_TO_PATH = new Function<String, Path>() {
+    @Override
+    public Path apply(String path) {
+      return Paths.get(path).normalize();
+    }
+  };
 
   /** Utility class: do not instantiate. */
   private MorePaths() {}

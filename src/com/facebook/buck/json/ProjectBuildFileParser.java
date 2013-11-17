@@ -16,6 +16,19 @@
 
 package com.facebook.buck.json;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 import com.facebook.buck.util.Ansi;
 import com.facebook.buck.util.InputStreamConsumer;
 import com.facebook.buck.util.ProjectFilesystem;
@@ -28,18 +41,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Delegates to buck.py for parsing of buck build files.  Constructed on demand for the
@@ -56,7 +57,7 @@ public class ProjectBuildFileParser implements AutoCloseable {
   private BufferedWriter buckPyStdinWriter;
 
   private final File projectRoot;
-  private final ImmutableSet<String> ignorePaths;
+  private final ImmutableSet<Path> ignorePaths;
   private final ImmutableList<String> commonIncludes;
   private final String pythonInterpreter;
 
@@ -164,9 +165,9 @@ public class ProjectBuildFileParser implements AutoCloseable {
       argBuilder.add(include);
     }
 
-    for (String path : ignorePaths) {
+    for (Path path : ignorePaths) {
       argBuilder.add("--ignore_path");
-      argBuilder.add(path);
+      argBuilder.add(path.toString());
     }
 
     return argBuilder.build();

@@ -72,7 +72,6 @@ public class BuildTargetParser {
       throw new BuildTargetParseException(String.format(
           "%s must contain exactly one colon (found %d)", buildTargetName, parts.size() - 1));
     }
-
     String baseName = parts.get(0).isEmpty() ? parseContext.getBaseName() : parts.get(0);
     String shortName = parts.get(1);
 
